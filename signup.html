@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>sign up new user account</title>
+    </head>
+    <body>
+        <form action="signup.php"  method="post">
+            <p>user name:<input type="text" name="username"></p>
+            <p>password: <input type="password" name="password"></p>
+            <p>re-enter password: <input type="password" name="repeatpassword"></p>
+            <P>
+                user type:
+                <select name="usertype">
+                  <option value="admin">admin</option> 
+                  <option value="user">user</option> 
+                </select>
+            </P>
+            <p><input type="submit" name="submit" value="sign up"></p>
+        </form>
+
+        <p><a href="index.php">retrun to home page</a></p>
+    </body>
+</html>

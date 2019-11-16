@@ -22,8 +22,13 @@
     	$usertype = filter_input(INPUT_POST, 'usertype', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     	$userid      = filter_input(INPUT_POST, 'userid', FILTER_SANITIZE_NUMBER_INT);
 
+        //hash the password using password_hash()
+
+
     	//
     	if ($password==$repeatpassword) {
+
+            $password=password_hash($password, PASSWORD_DEFAULT);
 
     		$query = "INSERT INTO user (password, username, usertype, userid) values (:password, :username, :usertype, :userid)";
     		$statement = $db->prepare($query);
@@ -35,7 +40,6 @@
     	// Execute the SELECT
     		$statement->execute();
     		$_SESSION['username']=$username;
-    		$_SESSION['password']=$password;
     		$_SESSION['usertype']=$usertype;
     		$_SESSION['userid']=$userid;
     		header('Location:index.php');

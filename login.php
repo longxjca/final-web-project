@@ -21,27 +21,36 @@
     	$userid      = filter_input(INPUT_POST, 'userid', FILTER_SANITIZE_NUMBER_INT);
 
     	//query the username and password matching the database value
-
-    	$query = "SELECT * FROM user WHERE username = :username AND password= :password";
+        
+    	$query = "SELECT * FROM user WHERE username = :username";
     	$statement = $db->prepare($query);
     	$statement->bindValue(':username', $username);        
-    	$statement->bindValue(':password', $password);
+    	// $statement->bindValue(':password', $password);
     	// $statement->bindValue(':userid', $userid, PDO::PARAM_INT);
     
     	 // Execute the SELECT
+
     	$statement->execute();
+
+        //fetch the password from database based on the username
+        $row=$statement->fetch();
     	
     	//count the number of matched records
     	$row_number=$statement->rowCount();
 
     	if ($row_number) {
-    		$_SESSION['username']=$username;
-    		$_SESSION['password']=$password;
-    		$_SESSION['usertype']=$usertype;
-    		$_SESSION['userid']=$userid;
-    		
-    		header('Location:index.php');
-    		exit;
+            //using password_verify function to compare the fetched password to the user input passowrd
+
+            if (password_verify($password, $row['password'])) {
+                # code...
+                $_SESSION['username']=$username;
+                $_SESSION['usertype']=$usertype;
+                $_SESSION['userid']=$userid;
+            
+                header('Location:index.php');
+                exit;
+            }
+
 
     	}else{
     		$error_flag=true;

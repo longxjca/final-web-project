@@ -49,7 +49,7 @@ if ($is_Create) {
 
 
       if ($password==$repeatpassword) {
-
+        $password=password_hash($password, PASSWORD_DEFAULT);
         $query = "INSERT INTO user (password, username, usertype, userid) values (:password, :username, :usertype, :userid)";
         $statement = $db->prepare($query);
         $statement->bindValue(':password', $password);
@@ -60,7 +60,6 @@ if ($is_Create) {
       // Execute the SELECT
         $statement->execute();
         $_SESSION['username']=$username;
-        $_SESSION['password']=$password;
         $_SESSION['usertype']=$usertype;
         $_SESSION['userid']=$userid;
         header('Location:manager_users.php');
@@ -101,6 +100,7 @@ if ($is_Update) {
     # code...
       if ($password==$repeatpassword) {
         # code...
+            $password=password_hash($password, PASSWORD_DEFAULT);
             $query = "UPDATE user SET username = :username, password = :password, usertype= :usertype WHERE userid = :userid";
             $statement = $db->prepare($query);
             $statement->bindValue(':username', $username);        
@@ -111,7 +111,6 @@ if ($is_Update) {
                   // Execute the INSERT.
             $statement->execute();
             $_SESSION['username']=$username;
-            $_SESSION['password']=$password;
             $_SESSION['usertype']=$usertype;
             $_SESSION['userid']=$userid;
             header('Location:manager_users.php');

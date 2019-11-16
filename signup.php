@@ -27,6 +27,7 @@
 
     	//
     	if ($password==$repeatpassword) {
+            //without specifying the salt , password_hash will generate the salt by itself
 
             $password=password_hash($password, PASSWORD_DEFAULT);
 

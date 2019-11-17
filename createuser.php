@@ -8,6 +8,7 @@
  * @Purpose: 
  */
   // require 'authentication.php';
+session_start();
 ?>
 <!DOCTYPE html>
 <html>
@@ -19,7 +20,7 @@
 <body>
     <div id="wrapper">
         <div id="header">
-            <h1><a href="index.php">EXCHANGE DISTRICT COMMUNITY COOKERY SCHOOL - New Post</a></h1>
+            <h1><a href="index.php?sort=home">EXCHANGE DISTRICT COMMUNITY COOKERY SCHOOL - New Post</a></h1>
         </div> <!-- END div id="header" -->
 <ul id="menu">
     <li><a href="manager_users.php" >User Lists</a></li>

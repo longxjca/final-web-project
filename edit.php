@@ -9,6 +9,7 @@
 // require 'authentication.php';
 
 include 'connect.php';
+session_start();
 // require 'authentication.php';
 
 $postid = filter_input(INPUT_GET, 'postid', FILTER_SANITIZE_NUMBER_INT);
@@ -35,7 +36,7 @@ $menu= $statement->fetch();
             <h1><a href="index.php">EXCHANGE DISTRICT COMMUNITY COOKERY SCHOOL - Edit Post</a></h1>
         </div> <!-- END div id="header" -->
 <ul id="menu">
-    <li><a href="index.php" >Home</a></li>
+    <li><a href="index.php?sort=home" >Home</a></li>
     <li><a href="create.php" >New Post</a></li>
 </ul> <!-- END div id="menu" -->
 <div id="all_blogs">

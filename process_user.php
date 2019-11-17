@@ -147,13 +147,13 @@ if ($is_Delete) {
 <html>
 <head>
     <meta charset="utf-8">
-    <title> LongxunBLOG</title>
+    <title>  Exchange District Cookery school</title>
     <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body>
     <div id="wrapper">
         <div id="header">
-            <h1><a href="index.php"></a></h1>
+            <h1><a href="index.php?sort=home"></a></h1>
         </div> <!-- END div id="header" -->
 <?php if ($error_flag) : ?>
 <h1>An error occured while processing your post.</h1>

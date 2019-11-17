@@ -9,6 +9,7 @@
  */
 include 'connect.php';
 // require 'authentication.php';
+session_start();
 
 $is_Create=false;
 $is_Update=false;
@@ -37,7 +38,9 @@ if ($is_Create) {
 	$title=filter_input(INPUT_POST, 'title', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 	$content=filter_input(INPUT_POST, 'content', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 	$postid= filter_input(INPUT_POST, 'postid', FILTER_SANITIZE_NUMBER_INT);
-    $userid      = filter_input(INPUT_POST, 'userid', FILTER_SANITIZE_NUMBER_INT);
+    // $userid      = filter_input(INPUT_POST, 'userid', FILTER_SANITIZE_NUMBER_INT);
+    $userid=$_SESSION['userid'];
+    $username=$_SESSION['username'];
 
     // file_upload_path() - Safely build a path String that uses slashes appropriate for our OS.
     // Default upload path is an 'uploads' sub-folder in the current folder.
@@ -70,9 +73,10 @@ if ($is_Create) {
 
 
 	//validate the input
-	if ($title===""||$content===""||$upload_error_detected>0) {
+	if ($title===""||$content==="") {
 		$error=true;
 	}
+    //||$upload_error_detected>0
 	else {
         if ($image_upload_detected) { 
             $image_filename        = $_FILES['image']['name'];
@@ -84,14 +88,16 @@ if ($is_Create) {
         }
         $picturename=$_FILES['image']['name'];
 		//insert the input
-		$query="INSERT INTO post (title, content, picturename) values (:title, :content, :picturename) ";
+		$query="INSERT INTO post (title, content, picturename, userid, username) values (:title, :content, :picturename, :userid, :username) ";
 		$statement=$db->prepare($query);
 		$statement->bindValue(':title',$title);
 		$statement->bindValue(':content',$content);
         $statement->bindValue(':picturename',$picturename);
+        $statement->bindValue(':userid',$userid);
+        $statement->bindValue(':username',$username);
 		$statement->execute();
 		$insert_id=$db->lastInsertId();
-		header('Location:index.php');
+		header('Location:index.php?sort=home');
 		exit;		
 	}
 }
@@ -100,7 +106,9 @@ if ($is_Update) {
     $title  = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $postid      = filter_input(INPUT_POST, 'postid', FILTER_SANITIZE_NUMBER_INT);
-    $userid      = filter_input(INPUT_POST, 'userid', FILTER_SANITIZE_NUMBER_INT);
+    //$userid      = filter_input(INPUT_POST, 'userid', FILTER_SANITIZE_NUMBER_INT);
+    $userid=$_SESSION['userid'];
+    $username=$_SESSION['username'];
 
         // file_upload_path() - Safely build a path String that uses slashes appropriate for our OS.
     // Default upload path is an 'uploads' sub-folder in the current folder.
@@ -131,9 +139,10 @@ if ($is_Update) {
     $upload_error_detected = isset($_FILES['image']) && ($_FILES['image']['error'] > 0);
 
 
-    if ($title===""||$content===""||$upload_error_detected>0) {
+    if ($title===""||$content==="") {
     	$error=true;
     }
+    //||$upload_error_detected>0
     else{
         if ($image_upload_detected) { 
             $image_filename        = $_FILES['image']['name'];
@@ -145,16 +154,18 @@ if ($is_Update) {
         }
         $picturename=$_FILES['image']['name'];
     	// Build the parameterized SQL query and bind the sanitized values to the parameters
-    	$query = "UPDATE post SET title = :title, content = :content, picturename= :picturename, userid=:userid WHERE postid = :postid";
+    	$query = "UPDATE post SET title = :title, content = :content, picturename= :picturename, userid=:userid, update_date=CURRENT_TIME(), username=:username WHERE postid = :postid";
     	$statement = $db->prepare($query);
     	$statement->bindValue(':title', $title);        
     	$statement->bindValue(':content', $content);
         $statement->bindValue(':picturename',$picturename);
+        $statement->bindValue(':username',$username);
     	$statement->bindValue(':postid', $postid, PDO::PARAM_INT);
         $statement->bindValue(':userid', $userid, PDO::PARAM_INT);
-    	 // Execute the INSERT.
+    	 // Execute the Update.
+        //$update_date="INSERT INTO post (update_date) values (CURRENT_TIME())";
     	$statement->execute();
-    	header('Location:index.php');
+    	header('Location:index.php?sort=home');
     	exit;
     }
 }
@@ -164,7 +175,7 @@ if ($is_Delete) {
     $statement = $db->prepare($query);
     $statement->bindValue(':postid', $postid, PDO::PARAM_INT);
     $statement->execute();
-	header('Location:index.php');
+	header('Location:index.php?sort=home');
 	exit;
 }
 
@@ -176,13 +187,13 @@ if ($is_Delete) {
 <html>
 <head>
     <meta charset="utf-8">
-    <title> LongxunBLOG</title>
+    <title> Exchange District Cookery school</title>
     <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body>
     <div id="wrapper">
         <div id="header">
-            <h1><a href="index.php"></a></h1>
+            <h1><a href="index.php?sort=home"></a></h1>
         </div> <!-- END div id="header" -->
 <?php if ($error) : ?>
 <h1>An error occured while processing your post.</h1>

@@ -45,9 +45,9 @@
                 # code...
                 $_SESSION['username']=$username;
                 $_SESSION['usertype']=$usertype;
-                $_SESSION['userid']=$userid;
+                $_SESSION['userid']=$row['userid'];
             
-                header('Location:index.php');
+                header('Location:index.php?sort=home');
                 exit;
             }
 
